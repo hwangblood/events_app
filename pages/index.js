@@ -1,9 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "../styles/Home.module.css";
 
-export default function Home() {
+function Home({ categories }) {
   return (
     <>
       <Head>
@@ -15,44 +14,32 @@ export default function Home() {
 
       <header>
         <nav>
-          {/* <Image src="" alt="" /> */}
-          <Link href="/">Home</Link>
-          <Link href="/events">Events</Link>
-          <Link href="/about">About</Link>
+          <Link href="/" passHref>
+            Home
+          </Link>
+          <Link href="/events" passHref>
+            Events
+          </Link>
+          <Link href="/about" passHref>
+            About
+          </Link>
         </nav>
       </header>
-      <main className={styles.main}>
+
+      <main>
         <div>
-          <Link href="">
-            {/* <Image src="" alt="" /> */}
-            <h2>Events in London</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-              impedit nam reprehenderit itaque laborum in, odio beatae et soluta
-              quo magnam a eaque veritatis obcaecati ex nulla totam architecto
-              aspernatur?
-            </p>
-          </Link>
-          <Link href="">
-            {/* <Image src="" alt="" /> */}
-            <h2>Events in San Francisco</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-              impedit nam reprehenderit itaque laborum in, odio beatae et soluta
-              quo magnam a eaque veritatis obcaecati ex nulla totam architecto
-              aspernatur?
-            </p>
-          </Link>
-          <Link href="">
-            {/* <Image src="" alt="" /> */}
-            <h2>Events in Barcelona</h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-              impedit nam reprehenderit itaque laborum in, odio beatae et soluta
-              quo magnam a eaque veritatis obcaecati ex nulla totam architecto
-              aspernatur?
-            </p>
-          </Link>
+          {categories.map((category) => (
+            <Link key={category.id} href={`/events/${category.id}`} passHref>
+              <Image
+                src={category.image}
+                alt={category.title}
+                width={300}
+                height={300}
+              />
+              <h2>{category.title}</h2>
+              <p>{category.description}</p>
+            </Link>
+          ))}
         </div>
       </main>
 
@@ -60,3 +47,14 @@ export default function Home() {
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  const { categories } = await import("/data/db.json");
+  return {
+    props: {
+      categories,
+    },
+  };
+}
+
+export default Home;
