@@ -1,3 +1,5 @@
+# Events App
+
 A Full Stack Events app built with Next.js from scratch.
 
 ## Getting Started
